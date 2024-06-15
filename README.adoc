@@ -1,23 +1,25 @@
-= Rust: Template (short description)
+= visoma-cli
+
+A simple command line program to interact with Visoma.
 
 == Getting started
 
-. Download and unpack the asset for your platform from the https://github.com/andreaslongo/template-rust/releases[release page].
-** *Linux*: https://github.com/andreaslongo/template-rust/releases/latest/download/template-rust-x86_64-unknown-linux-musl.tar.gz[template-rust-x86_64-unknown-linux-musl.tar.gz]
-** *Windows*: https://github.com/andreaslongo/template-rust/releases/latest/download/template-rust-x86_64-pc-windows-msvc.zip[template-rust-x86_64-pc-windows-msvc.zip]
+. Download and unpack the asset for your platform from the https://github.com/andreaslongo/visoma-cli/releases[release page].
+** *Linux*: https://github.com/andreaslongo/visoma-cli/releases/latest/download/visoma-cli-x86_64-unknown-linux-musl.tar.gz[visoma-cli-x86_64-unknown-linux-musl.tar.gz]
+** *Windows*: https://github.com/andreaslongo/visoma-cli/releases/latest/download/visoma-cli-x86_64-pc-windows-msvc.zip[visoma-cli-x86_64-pc-windows-msvc.zip]
 
 . Open a terminal and run the program.
 
 [,bash]
 ----
 # Linux
-al@linux ~ $ ./template-rust
+al@linux ~ $ ./visoma-cli
 ----
 
 [,powershell]
 ----
 # Windows
-PS C:\Users\al> .\template-rust.exe --help
+PS C:\Users\al> .\visoma-cli.exe --help
 ----
 
 == Contributing

@@ -1,11 +1,11 @@
 [package]
-name = "template-rust"
+name = "visoma-cli"
 version = "0.1.0"
 edition = "2021"
 authors = ["Andreas Longo <git@andreaslongo.com>"]
 license = "GPL-3.0-or-later"
-repository = "https://github.com/andreaslongo/template-rust"
-description = "A Rust package template"
+repository = "https://github.com/andreaslongo/visoma-cli"
+description = "A simple command line program to interact with Visoma"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
