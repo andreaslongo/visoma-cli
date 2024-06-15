@@ -1,6 +1,6 @@
 = visoma-cli
 
-A simple command line program to interact with Visoma.
+A CLI utility for interacting with Visoma.
 
 == Getting started
 

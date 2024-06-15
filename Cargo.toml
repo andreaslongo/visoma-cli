@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Andreas Longo <git@andreaslongo.com>"]
 license = "GPL-3.0-or-later"
 repository = "https://github.com/andreaslongo/visoma-cli"
-description = "A simple command line program to interact with Visoma"
+description = "A CLI utility for interacting with Visoma"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
