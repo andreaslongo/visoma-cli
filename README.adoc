@@ -1,0 +1,54 @@
+= Rust: Template (short description)
+
+== Getting started
+
+. Download and unpack the asset for your platform from the https://github.com/andreaslongo/template-rust/releases[release page].
+** *Linux*: https://github.com/andreaslongo/template-rust/releases/latest/download/template-rust-x86_64-unknown-linux-musl.tar.gz[template-rust-x86_64-unknown-linux-musl.tar.gz]
+** *Windows*: https://github.com/andreaslongo/template-rust/releases/latest/download/template-rust-x86_64-pc-windows-msvc.zip[template-rust-x86_64-pc-windows-msvc.zip]
+
+. Open a terminal and run the program.
+
+[,bash]
+----
+# Linux
+al@linux ~ $ ./template-rust
+----
+
+[,powershell]
+----
+# Windows
+PS C:\Users\al> .\template-rust.exe --help
+----
+
+== Contributing
+
+The best way to get started is to build and run a local dev container.
+
+You can use https://podman.io[Podman] or any other OCI compliant container manager.
+The dev container has all the required dependencies for working with the project.
+
+[,bash]
+----
+container/build.sh
+container/run.sh
+----
+
+From inside the container, you can then run some workflows.
+
+[,bash]
+----
+cargo fmt && cargo clippy --all-targets  # run code formatter and linter
+cargo test  # run tests
+cargo doc   # build the docs
+cargo run   # run the binary crate
+----
+
+=== Useful resources
+
+* https://github.com/andreaslongo/learn-rust
+
+== License
+
+Copyright (C) 2024 Andreas Longo
+
+GNU General Public License v3.0 or later
