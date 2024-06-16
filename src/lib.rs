@@ -12,8 +12,8 @@
 /// # Examples
 ///
 /// ```
-/// assert_eq!(template_rust::add(1, 2), 3);
-/// assert_eq!(template_rust::add(5, 5), 10);
+/// assert_eq!(visoma_cli::add(1, 2), 3);
+/// assert_eq!(visoma_cli::add(5, 5), 10);
 /// ```
 #[must_use]
 pub fn add(left: usize, right: usize) -> usize {

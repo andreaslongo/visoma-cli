@@ -22,6 +22,22 @@ al@linux ~ $ ./visoma-cli
 PS C:\Users\al> .\visoma-cli.exe --help
 ----
 
+== Features
+
+=== Creating tickets
+
+[,console]
+----
+$ visoma-cli ticket create \
+    --host <> \
+    --user <> \
+    --password <> \
+    --title <> \
+    --description <> \
+    --customerid <> \
+    --addressid <>
+----
+
 == Contributing
 
 The best way to get started is to build and run a local dev container.

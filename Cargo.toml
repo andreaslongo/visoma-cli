@@ -10,6 +10,7 @@ description = "A CLI utility for interacting with Visoma"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = { version = "4.5.7", features = ["derive"] }
 ###############################################################################
 # CLI
 ###############################################################################
@@ -39,5 +40,7 @@ description = "A CLI utility for interacting with Visoma"
 # uuid = { version = "1.7.0", features = ["serde", "v4"] }
 
 [dev-dependencies]
+assert_cmd = "2.0.14"
+predicates = "3.1.0"
 # # Web tests
 # tower-service = "0.3.2"
