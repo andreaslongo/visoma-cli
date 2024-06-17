@@ -4,9 +4,21 @@ fn main() {
     let _args = Cli::parse();
 }
 
+
+
+#[derive(Debug, Parser)]
+#[command(version, about, long_about = None)]
+struct Cli {
+    /// Don't do anything, just show what would be done
+    #[arg(short='n', long, global=true)]
+    dry_run: bool,
+    #[command(subcommand)]
+    command: Commands,
+}
+
 #[derive(Debug, Args)]
 struct VisomaLogin {
-    /// Visoma hostname
+    /// Visoma server
     #[arg(short, long)]
     server: String,
     /// Visoma user
@@ -17,13 +29,6 @@ struct VisomaLogin {
     password: String,
 }
 
-#[derive(Debug, Parser)]
-#[command(version, about, long_about = None)]
-struct Cli {
-    #[command(subcommand)]
-    command: Commands,
-}
-
 #[derive(Debug, Subcommand)]
 enum Commands {
     /// Creates a new ticket
@@ -32,16 +37,16 @@ enum Commands {
         #[command(flatten)]
         visoma_login: VisomaLogin,
         /// Ticket title
-        #[arg(short, long)]
+        #[arg(long)]
         title: String,
         /// Ticket description
-        #[arg(short, long)]
+        #[arg(long)]
         description: String,
         /// Ticket customer ID
-        #[arg(short, long)]
+        #[arg(long)]
         customer_id: usize,
         /// Ticket customer address ID
-        #[arg(short, long)]
+        #[arg(long)]
         address_id: usize,
     },
 }

@@ -8,15 +8,19 @@
 #![warn(rust_2018_idioms)]
 
 use assert_cmd::prelude::*;
+use predicates::prelude::*;
 use std::process::Command;
 
 #[test]
 fn print_help() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.arg("--help");
-    cmd.assert().success().code(0);
-    // TODO: Assert stdout contains ...
-    //.stdout("A CLI utility for interacting with Visoma.");
+    cmd.assert()
+        .success()
+        .code(0)
+        .stdout(predicate::str::contains(
+            "A CLI utility for interacting with Visoma",
+        ));
     Ok(())
 }
 
@@ -24,6 +28,9 @@ fn print_help() -> Result<(), Box<dyn std::error::Error>> {
 fn print_version() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.arg("--version");
-    cmd.assert().success().code(0).stdout("visoma-cli 0.1.0\n");
+    cmd.assert()
+        .success()
+        .code(0)
+        .stdout(predicate::str::is_match(r"^visoma-cli \d+\.\d+\.\d+\n$")?);
     Ok(())
 }

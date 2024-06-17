@@ -29,13 +29,13 @@ PS C:\Users\al> .\visoma-cli.exe --help
 [,console]
 ----
 $ visoma-cli ticket create \
-    --host <> \
+    --server <> \
     --user <> \
     --password <> \
     --title <> \
     --description <> \
-    --customerid <> \
-    --addressid <>
+    --customer-id <> \
+    --address-id <>
 ----
 
 == Contributing
