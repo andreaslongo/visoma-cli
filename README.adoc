@@ -24,18 +24,19 @@ PS C:\Users\al> .\visoma-cli.exe --help
 
 == Features
 
-=== Creating tickets
+=== Creating new tickets
 
 [,console]
 ----
-$ visoma-cli ticket create \
-    --server <> \
-    --user <> \
-    --password <> \
-    --title <> \
-    --description <> \
-    --customer-id <> \
-    --address-id <>
+$ visoma-cli ticket new \
+    --dry-run \
+    --server visoma.example.com \
+    --user visoma_user \
+    --password visoma_password \
+    --title 'New Ticket' \
+    --description 'A new ticket' \
+    --customer-id 1 \
+    --address-id 2
 ----
 
 == Contributing
