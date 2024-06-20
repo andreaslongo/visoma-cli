@@ -14,14 +14,18 @@ fn main() {
                 customer_id,
                 address_id,
             } => {
-                println!("Dry run, this would be done:");
-                println!("  Create new ticket:");
-                println!("    Server: {server}");
-                println!("    User: {user}");
-                println!("    Ticket: {title}");
-                println!("    Description: {description}");
-                println!("    Customer ID: {customer_id}");
-                println!("    Address ID: {address_id}");
+                if args.dry_run {
+                    println!("Dry run, this would be done:");
+                    println!("  Create new ticket:");
+                    println!("    Server: {server}");
+                    println!("    User: {user}");
+                    println!("    Ticket: {title}");
+                    println!("    Description: {description}");
+                    println!("    Customer ID: {customer_id}");
+                    println!("    Address ID: {address_id}");
+                } else {
+                    println!("Creating new ticket");
+                }
             }
         },
     }
