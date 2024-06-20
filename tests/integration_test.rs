@@ -49,7 +49,7 @@ fn ticket_new_syntax() -> Result<(), Box<dyn std::error::Error>> {
 #[test]
 fn ticket_new() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
-    cmd.args(&[
+    cmd.args([
         "ticket",
         "new",
         "--dry-run",
