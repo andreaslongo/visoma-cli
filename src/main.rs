@@ -1,4 +1,6 @@
 use clap::{Args, Parser, Subcommand};
+use std::process;
+use visoma_cli::{run, Config};
 
 fn main() {
     let args = Cli::parse();
@@ -14,17 +16,19 @@ fn main() {
                 customer_id,
                 address_id,
             } => {
-                if args.dry_run {
-                    println!("Dry run, this would be done:");
-                    println!("  Create new ticket:");
-                    println!("    Server: {server}");
-                    println!("    User: {user}");
-                    println!("    Ticket: {title}");
-                    println!("    Description: {description}");
-                    println!("    Customer ID: {customer_id}");
-                    println!("    Address ID: {address_id}");
-                } else {
-                    println!("Creating new ticket");
+                let config = Config::new(
+                    args.dry_run,
+                    server,
+                    user,
+                    password,
+                    title,
+                    description,
+                    customer_id,
+                    address_id,
+                );
+                if let Err(e) = run(&config) {
+                    println!("Application error: {e}");
+                    process::exit(1);
                 }
             }
         },
