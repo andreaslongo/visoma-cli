@@ -7,6 +7,8 @@
 #![warn(missing_docs)]
 #![warn(rust_2018_idioms)]
 
+use reqwest::blocking::Client;
+use reqwest::header;
 use std::error::Error;
 
 /// The configuration for the program
@@ -53,6 +55,21 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
         println!("    Address ID: {address_id}");
     } else {
         println!("Creating new ticket");
+        let mut headers = header::HeaderMap::new();
+        headers.insert("VMX-USER", header::HeaderValue::from_str(&user)?);
+        let mut auth_value = header::HeaderValue::from_str(&password)?;
+        auth_value.set_sensitive(true);
+        headers.insert("VMX-PASSWORD", auth_value);
+        let client = Client::builder()
+            .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3")
+            .default_headers(headers)
+            .https_only(true)
+            .build()?;
+
+        // https://stackoverflow.com/questions/5725430/http-test-server-accepting-get-post-requests
+        let res = client.get("https://httpbin.org/anything").send()?;
+        dbg!(&res);
+        dbg!(&res.text()?);
     }
     Ok(())
 }
