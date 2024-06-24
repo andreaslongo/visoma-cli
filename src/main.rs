@@ -3,35 +3,28 @@ use std::process;
 use visoma_cli::{run, Config};
 
 fn main() {
-    let args = Cli::parse();
+    let cli = Cli::parse();
 
-    match args.command {
-        Commands::Ticket(ticket) => match ticket.command {
-            TicketCommands::New {
-                server,
-                user,
-                password,
-                title,
-                description,
-                customer_id,
-                address_id,
-            } => {
-                let config = Config::new(
-                    args.dry_run,
-                    server,
-                    user,
-                    password,
-                    title,
-                    description,
-                    customer_id,
-                    address_id,
-                );
-                if let Err(e) = run(&config) {
-                    println!("Application error: {e}");
-                    process::exit(1);
-                }
+    match cli.command {
+        Commands::Ticket(TicketArgs {
+            command: TicketCommands::New(args @ TicketNewArgs { .. }),
+            ..
+        }) => {
+            let config = Config {
+                dry_run: cli.dry_run,
+                server: args.server,
+                user: args.user,
+                password: args.password,
+                title: args.title,
+                description: args.description,
+                customer_id: args.customer_id,
+                address_id: args.address_id,
+            };
+            if let Err(e) = run(config) {
+                println!("Application error: {e}");
+                process::exit(1);
             }
-        },
+        }
     }
 }
 
@@ -62,27 +55,30 @@ struct TicketArgs {
 #[derive(Debug, Subcommand)]
 enum TicketCommands {
     /// Creates a new ticket
-    New {
-        /// Visoma server
-        #[arg(short, long)]
-        server: String,
-        /// Visoma user
-        #[arg(short, long)]
-        user: String,
-        /// Visoma password
-        #[arg(short, long)]
-        password: String,
-        /// Ticket title
-        #[arg(long)]
-        title: String,
-        /// Ticket description
-        #[arg(long)]
-        description: String,
-        /// Ticket customer ID
-        #[arg(long)]
-        customer_id: usize,
-        /// Ticket customer address ID
-        #[arg(long)]
-        address_id: usize,
-    },
+    New(TicketNewArgs),
+}
+
+#[derive(Debug, Args)]
+struct TicketNewArgs {
+    /// Visoma server
+    #[arg(short, long)]
+    server: String,
+    /// Visoma user
+    #[arg(short, long)]
+    user: String,
+    /// Visoma password
+    #[arg(short, long)]
+    password: String,
+    /// Ticket title
+    #[arg(long)]
+    title: String,
+    /// Ticket description
+    #[arg(long)]
+    description: String,
+    /// Ticket customer ID
+    #[arg(long)]
+    customer_id: usize,
+    /// Ticket customer address ID
+    #[arg(long)]
+    address_id: usize,
 }
