@@ -9,6 +9,7 @@
 
 use reqwest::blocking::Client;
 use reqwest::header;
+use std::collections::HashMap;
 use std::error::Error;
 
 /// The configuration for the program
@@ -49,27 +50,40 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
         println!("  Create new ticket:");
         println!("    Server: {server}");
         println!("    User: {user}");
-        println!("    Ticket: {title}");
+        println!("    Title: {title}");
         println!("    Description: {description}");
         println!("    Customer ID: {customer_id}");
         println!("    Address ID: {address_id}");
     } else {
-        println!("Creating new ticket");
+        // Creating new ticket
+
+        // Build client
+        let user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3";
+
         let mut headers = header::HeaderMap::new();
-        headers.insert("VMX-USER", header::HeaderValue::from_str(&user)?);
-        let mut auth_value = header::HeaderValue::from_str(&password)?;
-        auth_value.set_sensitive(true);
-        headers.insert("VMX-PASSWORD", auth_value);
+
+        let user_value = header::HeaderValue::from_str(&user)?;
+        let mut password_value = header::HeaderValue::from_str(&password)?;
+        password_value.set_sensitive(true);
+
+        headers.insert("X_VSM_USERNAME", user_value);
+        headers.insert("X_VSM_PASSWORD", password_value);
+
         let client = Client::builder()
-            .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3")
+            .user_agent(user_agent)
             .default_headers(headers)
             .https_only(true)
             .build()?;
 
-        // https://stackoverflow.com/questions/5725430/http-test-server-accepting-get-post-requests
-        let res = client.get("https://httpbin.org/anything").send()?;
-        dbg!(&res);
-        dbg!(&res.text()?);
+        // Build request for creating a new ticket
+        let url = format!("https://{server}/api2/ticket/");
+        let mut data = HashMap::new();
+        data.insert("Title", title);
+        data.insert("Description", description);
+        data.insert("CustomerId", customer_id.to_string());
+        data.insert("AddressId", address_id.to_string());
+
+        let res = client.post(url).json(&data).send()?;
     }
     Ok(())
 }
