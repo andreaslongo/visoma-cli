@@ -9,7 +9,7 @@
 
 use reqwest::blocking::Client;
 use reqwest::header;
-use std::collections::HashMap;
+use serde::Serialize;
 use std::error::Error;
 
 /// The configuration for the program
@@ -77,15 +77,16 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
 
     let client = build_client(&user, &password)?;
 
-    // Build request for creating a new ticket
-    let url = format!("https://{server}/api2/ticket/");
-    let mut data = HashMap::new();
-    data.insert("Title", title);
-    data.insert("Description", description);
-    data.insert("CustomerId", customer_id.to_string());
-    data.insert("AddressId", address_id.to_string());
+    let res = client
+        .post(format!("https://{server}/api2/ticket/"))
+        .json(&NewTicketRequest {
+            title,
+            description,
+            customer_id,
+            address_id,
+        })
+        .send()?;
 
-    let res = client.post(url).json(&data).send()?;
     Ok(())
 }
 
@@ -108,6 +109,18 @@ fn build_client(user: &str, password: &str) -> Result<Client, Box<dyn Error>> {
         .build()?;
 
     Ok(client)
+}
+
+/// Data for sending a request to the API for creating a new ticket.
+///
+/// This are the required fields. There are also optional fields which we currently don't use.
+#[derive(Serialize)]
+#[serde(rename_all(serialize = "PascalCase"))]
+struct NewTicketRequest {
+    title: String,
+    description: String,
+    customer_id: usize,
+    address_id: usize,
 }
 
 /// Calculates `left` + `right` and returns the result.
