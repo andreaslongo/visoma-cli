@@ -34,8 +34,37 @@ pub struct Config {
 ///
 /// Can fail.
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    if config.dry_run {
+        create_new_ticket_dry_run(config);
+    } else {
+        create_new_ticket(config)?;
+    }
+    Ok(())
+}
+
+fn create_new_ticket_dry_run(config: Config) {
     let Config {
-        dry_run,
+        server,
+        user,
+        title,
+        description,
+        customer_id,
+        address_id,
+        ..
+    } = config;
+
+    println!("Dry run, this would be done:");
+    println!("  Create new ticket:");
+    println!("    Server: {server}");
+    println!("    User: {user}");
+    println!("    Title: {title}");
+    println!("    Description: {description}");
+    println!("    Customer ID: {customer_id}");
+    println!("    Address ID: {address_id}");
+}
+
+fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
+    let Config {
         server,
         user,
         password,
@@ -43,48 +72,37 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
         description,
         customer_id,
         address_id,
+        ..
     } = config;
+    // Creating new ticket
 
-    if dry_run {
-        println!("Dry run, this would be done:");
-        println!("  Create new ticket:");
-        println!("    Server: {server}");
-        println!("    User: {user}");
-        println!("    Title: {title}");
-        println!("    Description: {description}");
-        println!("    Customer ID: {customer_id}");
-        println!("    Address ID: {address_id}");
-    } else {
-        // Creating new ticket
+    // Build client
+    let user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3";
 
-        // Build client
-        let user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3";
+    let mut headers = header::HeaderMap::new();
 
-        let mut headers = header::HeaderMap::new();
+    let user_value = header::HeaderValue::from_str(&user)?;
+    let mut password_value = header::HeaderValue::from_str(&password)?;
+    password_value.set_sensitive(true);
 
-        let user_value = header::HeaderValue::from_str(&user)?;
-        let mut password_value = header::HeaderValue::from_str(&password)?;
-        password_value.set_sensitive(true);
+    headers.insert("X_VSM_USERNAME", user_value);
+    headers.insert("X_VSM_PASSWORD", password_value);
 
-        headers.insert("X_VSM_USERNAME", user_value);
-        headers.insert("X_VSM_PASSWORD", password_value);
+    let client = Client::builder()
+        .user_agent(user_agent)
+        .default_headers(headers)
+        .https_only(true)
+        .build()?;
 
-        let client = Client::builder()
-            .user_agent(user_agent)
-            .default_headers(headers)
-            .https_only(true)
-            .build()?;
+    // Build request for creating a new ticket
+    let url = format!("https://{server}/api2/ticket/");
+    let mut data = HashMap::new();
+    data.insert("Title", title);
+    data.insert("Description", description);
+    data.insert("CustomerId", customer_id.to_string());
+    data.insert("AddressId", address_id.to_string());
 
-        // Build request for creating a new ticket
-        let url = format!("https://{server}/api2/ticket/");
-        let mut data = HashMap::new();
-        data.insert("Title", title);
-        data.insert("Description", description);
-        data.insert("CustomerId", customer_id.to_string());
-        data.insert("AddressId", address_id.to_string());
-
-        let res = client.post(url).json(&data).send()?;
-    }
+    let res = client.post(url).json(&data).send()?;
     Ok(())
 }
 
