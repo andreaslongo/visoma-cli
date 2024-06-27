@@ -13,6 +13,7 @@ description = "A CLI utility for interacting with Visoma"
 clap = { version = "4.5.7", features = ["derive"] }
 openssl = { version = "0.10.64", features = ["vendored"] }
 reqwest = { version = "0.12.5", features = ["blocking", "json"] }
+serde = { version = "1.0.203", features = ["derive"] }
 ###############################################################################
 # CLI
 ###############################################################################
