@@ -74,25 +74,8 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
         address_id,
         ..
     } = config;
-    // Creating new ticket
 
-    // Build client
-    let user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3";
-
-    let mut headers = header::HeaderMap::new();
-
-    let user_value = header::HeaderValue::from_str(&user)?;
-    let mut password_value = header::HeaderValue::from_str(&password)?;
-    password_value.set_sensitive(true);
-
-    headers.insert("X_VSM_USERNAME", user_value);
-    headers.insert("X_VSM_PASSWORD", password_value);
-
-    let client = Client::builder()
-        .user_agent(user_agent)
-        .default_headers(headers)
-        .https_only(true)
-        .build()?;
+    let client = build_client(&user, &password)?;
 
     // Build request for creating a new ticket
     let url = format!("https://{server}/api2/ticket/");
@@ -104,6 +87,27 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
 
     let res = client.post(url).json(&data).send()?;
     Ok(())
+}
+
+fn build_client(user: &str, password: &str) -> Result<Client, Box<dyn Error>> {
+    let user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3";
+
+    let mut headers = header::HeaderMap::new();
+
+    let user_value = header::HeaderValue::from_str(user)?;
+    let mut password_value = header::HeaderValue::from_str(password)?;
+    password_value.set_sensitive(true);
+
+    headers.insert("X_VSM_USERNAME", user_value);
+    headers.insert("X_VSM_PASSWORD", password_value);
+
+    let client = Client::builder()
+        .user_agent(user_agent)
+        .default_headers(headers)
+        .https_only(true)
+        .build()?;
+
+    Ok(client)
 }
 
 /// Calculates `left` + `right` and returns the result.
