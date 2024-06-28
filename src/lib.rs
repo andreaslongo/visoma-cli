@@ -9,7 +9,7 @@
 
 use reqwest::blocking::Client;
 use reqwest::header;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::error::Error;
 
 /// The configuration for the program
@@ -87,7 +87,11 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
         })
         .send()?;
 
-    Ok(())
+    if res.status().is_success() {
+        Ok(())
+    } else {
+        Err(res.json::<NewTicketResponse>()?.message.into())
+    }
 }
 
 fn build_client(user: &str, password: &str) -> Result<Client, Box<dyn Error>> {
@@ -123,26 +127,24 @@ struct NewTicketRequest {
     address_id: usize,
 }
 
-/// Calculates `left` + `right` and returns the result.
-///
-/// # Examples
-///
-/// ```
-/// assert_eq!(visoma_cli::add(1, 2), 3);
-/// assert_eq!(visoma_cli::add(5, 5), 10);
-/// ```
-#[must_use]
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+#[derive(Debug, Deserialize)]
+struct NewTicketResponse {
+    success: bool,
+    id: usize,
+    message: String,
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    // TODO: How can I inspect the client/request?
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn can_build_client() -> Result<(), Box<dyn Error>> {
+        let client = build_client("user1", "pw123")?;
+        let request = client.post("https://httpbin.org").build()?;
+        dbg!(&request);
+        // assert_eq!(1, 4);
+        Ok(())
     }
 }
