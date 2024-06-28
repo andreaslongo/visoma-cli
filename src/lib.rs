@@ -129,8 +129,8 @@ struct NewTicketRequest {
 
 #[derive(Debug, Deserialize)]
 struct NewTicketResponse {
-    success: bool,
-    id: usize,
+    _success: bool,
+    _id: usize,
     message: String,
 }
 
@@ -138,9 +138,9 @@ struct NewTicketResponse {
 mod tests {
     use super::*;
 
-    // TODO: How can I inspect the client/request?
+    // TODO: How can I inspect the client/request config?
     #[test]
-    fn can_build_client() -> Result<(), Box<dyn Error>> {
+    fn client_config() -> Result<(), Box<dyn Error>> {
         let client = build_client("user1", "pw123")?;
         let request = client.post("https://httpbin.org").build()?;
         dbg!(&request);
