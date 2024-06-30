@@ -89,6 +89,47 @@ fn ticket_new_dry_run() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
+fn ticket_new_dry_run_with_optional_args() -> Result<(), Box<dyn std::error::Error>> {
+    let mut cmd = Command::cargo_bin("visoma-cli")?;
+    cmd.args([
+        "ticket",
+        "new",
+        "--dry-run",
+        "--server",
+        "example.com",
+        "--user",
+        "test",
+        "--password",
+        "test123",
+        "--title",
+        "Test Ticket",
+        "--description",
+        "A new ticket for testing",
+        "--customer-id",
+        "1",
+        "--address-id",
+        "2",
+        "--arranger-id",
+        "3",
+    ]);
+    cmd.assert()
+        .success()
+        .code(0)
+        .stderr(predicate::str::is_empty())
+        .stdout(predicate::str::contains("Dry run"))
+        .stdout(predicate::str::contains("Create new ticket"))
+        .stdout(predicate::str::contains("Server: example.com"))
+        .stdout(predicate::str::contains("User: test"))
+        .stdout(predicate::str::contains("Title: Test Ticket"))
+        .stdout(predicate::str::contains(
+            "Description: A new ticket for testing",
+        ))
+        .stdout(predicate::str::contains("Customer ID: 1"))
+        .stdout(predicate::str::contains("Address ID: 2"))
+        .stdout(predicate::str::contains("Arranger ID: 3"));
+    Ok(())
+}
+#[test]
 fn ticket_new() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.args([
@@ -118,7 +159,7 @@ fn ticket_new() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn ticket_new_with_arranger_id() -> Result<(), Box<dyn std::error::Error>> {
+fn ticket_new_with_optional_args() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.args([
         "ticket",

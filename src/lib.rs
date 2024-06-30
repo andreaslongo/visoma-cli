@@ -26,6 +26,7 @@ pub struct Config {
     pub description: String,
     pub customer_id: usize,
     pub address_id: usize,
+    pub arranger_id: Option<usize>,
 }
 
 /// Performs the main actions
@@ -50,6 +51,7 @@ fn create_new_ticket_dry_run(config: Config) {
         description,
         customer_id,
         address_id,
+        arranger_id,
         ..
     } = config;
 
@@ -61,6 +63,9 @@ fn create_new_ticket_dry_run(config: Config) {
     println!("    Description: {description}");
     println!("    Customer ID: {customer_id}");
     println!("    Address ID: {address_id}");
+    if let Some(id) = arranger_id {
+        println!("    Arranger ID: {id}");
+    }
 }
 
 fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
@@ -72,6 +77,7 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
         description,
         customer_id,
         address_id,
+        arranger_id,
         ..
     } = config;
 

@@ -19,6 +19,7 @@ fn main() {
                 description: args.description,
                 customer_id: args.customer_id,
                 address_id: args.address_id,
+                arranger_id: args.arranger_id,
             };
             if let Err(e) = run(config) {
                 println!("Application error: {e}");
