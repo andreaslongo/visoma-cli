@@ -45,6 +45,24 @@ $ .\visoma-cli.exe ticket new `
     --address-id 2
 ----
 
+NOTE: Use `--arranger-id <user id>` to assing the ticket to another (pool) user.
+
+== Changelog
+
+All notable changes will be documented here.
+
+The format is based on https://keepachangelog.com/en/1.1.0/[Keep a Changelog],
+and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
+
+=== [Unreleased]
+
+==== Added
+
+* Optional argument `--arranger-id` to the `ticket new` command for assigning the ticket to a user other than the creator of the ticket.
+
+=== [0.1.0] - 2024-06-28
+
+Initial release.
 
 == Contributing
 
