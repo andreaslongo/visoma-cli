@@ -90,6 +90,7 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
             description,
             customer_id,
             address_id,
+            arranger_ids: arranger_id,
         })
         .send()?;
 
@@ -131,6 +132,7 @@ struct NewTicketRequest {
     description: String,
     customer_id: usize,
     address_id: usize,
+    arranger_ids: Option<usize>,
 }
 
 #[derive(Debug, Deserialize)]
