@@ -116,3 +116,34 @@ fn ticket_new() -> Result<(), Box<dyn std::error::Error>> {
         .stdout(predicate::str::is_empty());
     Ok(())
 }
+
+#[test]
+fn ticket_new_with_arranger_id() -> Result<(), Box<dyn std::error::Error>> {
+    let mut cmd = Command::cargo_bin("visoma-cli")?;
+    cmd.args([
+        "ticket",
+        "new",
+        "--server",
+        "httpbin.org/anything",
+        "--user",
+        "test",
+        "--password",
+        "test123",
+        "--title",
+        "Test Ticket",
+        "--description",
+        "A new ticket for testing",
+        "--customer-id",
+        "1",
+        "--address-id",
+        "2",
+        "--arranger-id",
+        "3",
+    ]);
+    cmd.assert()
+        .success()
+        .code(0)
+        .stderr(predicate::str::is_empty())
+        .stdout(predicate::str::is_empty());
+    Ok(())
+}

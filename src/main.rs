@@ -81,4 +81,7 @@ struct TicketNewArgs {
     /// Ticket customer address ID
     #[arg(long)]
     address_id: usize,
+    /// Ticket arranger ID
+    #[arg(long)]
+    arranger_id: Option<usize>,
 }
