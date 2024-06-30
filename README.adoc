@@ -4,22 +4,16 @@ A CLI utility for interacting with Visoma.
 
 == Getting started
 
-. Download and unpack the asset for your platform from the https://github.com/andreaslongo/visoma-cli/releases[release page].
+. Download and unpack the latest https://github.com/andreaslongo/visoma-cli/releases[binary release] for your platform:
 ** *Linux*: https://github.com/andreaslongo/visoma-cli/releases/latest/download/visoma-cli-x86_64-unknown-linux-musl.tar.gz[visoma-cli-x86_64-unknown-linux-musl.tar.gz]
 ** *Windows*: https://github.com/andreaslongo/visoma-cli/releases/latest/download/visoma-cli-x86_64-pc-windows-msvc.zip[visoma-cli-x86_64-pc-windows-msvc.zip]
 
 . Open a terminal and run the program.
 
-[,bash]
+[,console]
 ----
-# Linux
-al@linux ~ $ ./visoma-cli
-----
-
-[,powershell]
-----
-# Windows
-PS C:\Users\al> .\visoma-cli.exe --help
+$ ./visoma-cli --help      # Linux
+$ .\visoma-cli.exe --help  # Windows
 ----
 
 == Features
@@ -28,16 +22,29 @@ PS C:\Users\al> .\visoma-cli.exe --help
 
 [,console]
 ----
-$ visoma-cli ticket new \
+Linux (Bash):
+$ ./visoma-cli ticket new \
     --dry-run \
     --server visoma.example.com \
     --user visoma_user \
-    --password visoma_password \
+    --password 'visoma_password' \
     --title 'New Ticket' \
     --description 'A new ticket' \
     --customer-id 1 \
     --address-id 2
+
+Windows (Powershell):
+$ .\visoma-cli.exe ticket new `
+    --dry-run `
+    --server visoma.example.com `
+    --user visoma_user `
+    --password 'visoma_password' `
+    --title 'New Ticket' `
+    --description 'A new ticket' `
+    --customer-id 1 `
+    --address-id 2
 ----
+
 
 == Contributing
 
@@ -46,20 +53,20 @@ The best way to get started is to build and run a local dev container.
 You can use https://podman.io[Podman] or any other OCI compliant container manager.
 The dev container has all the required dependencies for working with the project.
 
-[,bash]
+[,console]
 ----
-container/build.sh
-container/run.sh
+$ container/build.sh
+$ container/run.sh
 ----
 
 From inside the container, you can then run some workflows.
 
-[,bash]
+[,console]
 ----
-cargo fmt && cargo clippy --all-targets  # run code formatter and linter
-cargo test  # run tests
-cargo doc   # build the docs
-cargo run   # run the binary crate
+$ cargo fmt && cargo clippy --all-targets  # run code formatter and linter
+$ cargo test  # run tests
+$ cargo doc   # build the docs
+$ cargo run   # run the binary crate
 ----
 
 === Useful resources
