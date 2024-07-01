@@ -9,6 +9,7 @@
 
 use reqwest::blocking::Client;
 use reqwest::header;
+use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 use std::error::Error;
 
@@ -92,13 +93,19 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
             address_id,
             arranger_ids: arranger_id,
         })
-        .send()?;
+        .send()?
+        .error_for_status()?;
 
-    if res.status().is_success() {
-        Ok(())
-    } else {
-        Err(res.json::<NewTicketResponse>()?.message.into())
-    }
+    //    if let Err(err) = res {
+    //        if err.status() == Some(StatusCode::BAD_REQUEST) {
+    //            Err(res?.json::<NewTicketResponse>()?.message.into())
+    //        } else {
+    //            Err(Box::new(err))
+    //        }
+    //    } else {
+    //       Ok(())
+    //    }
+    Ok(())
 }
 
 fn build_client(user: &str, password: &str) -> Result<Client, Box<dyn Error>> {
@@ -136,9 +143,10 @@ struct NewTicketRequest {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all(deserialize = "PascalCase"))]
 struct NewTicketResponse {
     _success: bool,
-    _id: usize,
+    _id: String,
     message: String,
 }
 
