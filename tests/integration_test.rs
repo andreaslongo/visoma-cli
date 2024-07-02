@@ -188,3 +188,34 @@ fn ticket_new_with_optional_args() -> Result<(), Box<dyn std::error::Error>> {
         .stdout(predicate::str::is_empty());
     Ok(())
 }
+
+#[test]
+fn ticket_new_fails_if_server_does_not_exist() -> Result<(), Box<dyn std::error::Error>> {
+    let mut cmd = Command::cargo_bin("visoma-cli")?;
+    cmd.args([
+        "ticket",
+        "new",
+        "--server",
+        "does.not.exist",
+        "--user",
+        "test",
+        "--password",
+        "test123",
+        "--title",
+        "Test Ticket",
+        "--description",
+        "A new ticket for testing",
+        "--customer-id",
+        "1",
+        "--address-id",
+        "2",
+        "--arranger-id",
+        "3",
+    ]);
+    cmd.assert()
+        .failure()
+        .code(1)
+        .stderr(predicate::str::contains("Application error: error sending request for url (https://does.not.exist/api2/ticket/)"))
+        .stdout(predicate::str::is_empty());
+    Ok(())
+}

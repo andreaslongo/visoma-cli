@@ -93,19 +93,14 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
             address_id,
             arranger_ids: arranger_id,
         })
-        .send()?
-        .error_for_status()?;
+        .send()?;
 
-    //    if let Err(err) = res {
-    //        if err.status() == Some(StatusCode::BAD_REQUEST) {
-    //            Err(res?.json::<NewTicketResponse>()?.message.into())
-    //        } else {
-    //            Err(Box::new(err))
-    //        }
-    //    } else {
-    //       Ok(())
-    //    }
-    Ok(())
+    if res.status() == StatusCode::BAD_REQUEST {
+        Err(res.json::<NewTicketResponse>()?.message.into())
+    } else {
+        res.error_for_status()?;
+        Ok(())
+    }
 }
 
 fn build_client(user: &str, password: &str) -> Result<Client, Box<dyn Error>> {
