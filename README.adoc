@@ -1,6 +1,6 @@
 = visoma-cli
 
-A CLI utility for interacting with Visoma.
+A CLI utility for interacting with https://www.visoma.net/tickets[Visoma].
 
 == Getting started
 
