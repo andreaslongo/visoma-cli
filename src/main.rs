@@ -22,7 +22,7 @@ fn main() {
                 arranger_id: args.arranger_id,
             };
             if let Err(e) = run(config) {
-                println!("Application error: {e}");
+                eprintln!("Application error: {e}");
                 process::exit(1);
             }
         }
