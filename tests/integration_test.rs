@@ -10,9 +10,10 @@
 use assert_cmd::prelude::*;
 use predicates::prelude::*;
 use std::process::Command;
+use visoma_cli::AppError;
 
 #[test]
-fn help() -> Result<(), Box<dyn std::error::Error>> {
+fn help() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.arg("--help");
     cmd.assert()
@@ -26,7 +27,7 @@ fn help() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn version() -> Result<(), Box<dyn std::error::Error>> {
+fn version() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.arg("--version");
     cmd.assert()
@@ -38,7 +39,7 @@ fn version() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn ticket_new_syntax() -> Result<(), Box<dyn std::error::Error>> {
+fn ticket_new_syntax() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.arg("ticket").arg("new").arg("--help");
     cmd.assert()
@@ -50,7 +51,7 @@ fn ticket_new_syntax() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn ticket_new_dry_run() -> Result<(), Box<dyn std::error::Error>> {
+fn ticket_new_dry_run() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.args([
         "ticket",
@@ -89,7 +90,7 @@ fn ticket_new_dry_run() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn ticket_new_dry_run_with_optional_args() -> Result<(), Box<dyn std::error::Error>> {
+fn ticket_new_dry_run_with_optional_args() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.args([
         "ticket",
@@ -130,7 +131,7 @@ fn ticket_new_dry_run_with_optional_args() -> Result<(), Box<dyn std::error::Err
     Ok(())
 }
 #[test]
-fn ticket_new() -> Result<(), Box<dyn std::error::Error>> {
+fn ticket_new() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.args([
         "ticket",
@@ -159,7 +160,7 @@ fn ticket_new() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn ticket_new_with_optional_args() -> Result<(), Box<dyn std::error::Error>> {
+fn ticket_new_with_optional_args() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.args([
         "ticket",
@@ -190,7 +191,7 @@ fn ticket_new_with_optional_args() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[test]
-fn ticket_new_fails_if_server_does_not_exist() -> Result<(), Box<dyn std::error::Error>> {
+fn ticket_new_fails_if_server_does_not_exist() -> Result<(), AppError> {
     let mut cmd = Command::cargo_bin("visoma-cli")?;
     cmd.args([
         "ticket",
@@ -215,7 +216,9 @@ fn ticket_new_fails_if_server_does_not_exist() -> Result<(), Box<dyn std::error:
     cmd.assert()
         .failure()
         .code(1)
-        .stderr(predicate::str::contains("Application error: error sending request for url (https://does.not.exist/api2/ticket/)"))
+        .stderr(predicate::str::contains(
+            "error sending request for url (https://does.not.exist/api2/ticket/)",
+        ))
         .stdout(predicate::str::is_empty());
     Ok(())
 }

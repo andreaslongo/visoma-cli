@@ -1,8 +1,7 @@
 use clap::{Args, Parser, Subcommand};
-use std::process;
-use visoma_cli::{run, Config};
+use visoma_cli::{run, AppError, Config};
 
-fn main() {
+fn main() -> Result<(), AppError> {
     let cli = Cli::parse();
 
     match cli.command {
@@ -21,12 +20,11 @@ fn main() {
                 address_id: args.address_id,
                 arranger_id: args.arranger_id,
             };
-            if let Err(e) = run(config) {
-                eprintln!("Application error: {e}");
-                process::exit(1);
-            }
+
+            run(config)?
         }
     }
+    Ok(())
 }
 
 #[derive(Debug, Parser)]

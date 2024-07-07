@@ -7,11 +7,15 @@
 #![warn(missing_docs)]
 #![warn(rust_2018_idioms)]
 
+use anyhow::anyhow;
 use reqwest::blocking::Client;
 use reqwest::header;
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
-use std::error::Error;
+
+/// An opaque error type for all kinds of application errors
+// pub type AppError = Box<dyn std::error::Error + Send + Sync + 'static>;
+pub type AppError = anyhow::Error;
 
 /// The configuration for the program
 ///
@@ -35,7 +39,7 @@ pub struct Config {
 /// # Errors
 ///
 /// Can fail.
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+pub fn run(config: Config) -> Result<(), AppError> {
     if config.dry_run {
         create_new_ticket_dry_run(config);
     } else {
@@ -69,7 +73,7 @@ fn create_new_ticket_dry_run(config: Config) {
     }
 }
 
-fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
+fn create_new_ticket(config: Config) -> Result<(), AppError> {
     let Config {
         server,
         user,
@@ -96,14 +100,15 @@ fn create_new_ticket(config: Config) -> Result<(), Box<dyn Error>> {
         .send()?;
 
     if res.status() == StatusCode::BAD_REQUEST {
-        Err(res.json::<NewTicketResponse>()?.message.into())
+        let message = res.json::<NewTicketResponse>()?.message;
+        Err(anyhow!("{}", message))
     } else {
         res.error_for_status()?;
         Ok(())
     }
 }
 
-fn build_client(user: &str, password: &str) -> Result<Client, Box<dyn Error>> {
+fn build_client(user: &str, password: &str) -> Result<Client, AppError> {
     let user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.3";
 
     let mut headers = header::HeaderMap::new();
@@ -151,7 +156,7 @@ mod tests {
 
     // TODO: How can I inspect the client/request config?
     #[test]
-    fn client_config() -> Result<(), Box<dyn Error>> {
+    fn client_config() -> Result<(), AppError> {
         let client = build_client("user1", "pw123")?;
         let request = client.post("https://httpbin.org").build()?;
         dbg!(&request);
