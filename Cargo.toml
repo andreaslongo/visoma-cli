@@ -7,8 +7,6 @@ license = "GPL-3.0-or-later"
 repository = "https://github.com/andreaslongo/visoma-cli"
 description = "A CLI utility for interacting with Visoma"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 anyhow = "1.0.86"
 clap = { version = "4.5.7", features = ["derive"] }
