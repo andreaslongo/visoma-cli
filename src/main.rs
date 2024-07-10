@@ -30,7 +30,7 @@ fn main() -> Result<(), AppError> {
                 arranger_id: args.arranger_id,
             };
 
-            run(config)?
+            run(config)?;
         }
     }
     Ok(())
