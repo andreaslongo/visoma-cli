@@ -1,6 +1,6 @@
 [package]
 name = "visoma-cli"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 authors = ["Andreas Longo <git@andreaslongo.com>"]
 license = "GPL-3.0-or-later"
