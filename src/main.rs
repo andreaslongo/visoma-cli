@@ -8,7 +8,7 @@
 #![warn(rust_2018_idioms)]
 
 use clap::{Args, Parser, Subcommand};
-use visoma_cli::{run, AppError, Config};
+use visoma_cli::{AppError, Config};
 
 fn main() -> Result<(), AppError> {
     let cli = Cli::parse();
@@ -30,7 +30,7 @@ fn main() -> Result<(), AppError> {
                 arranger_id: args.arranger_id,
             };
 
-            run(config)?;
+            visoma_cli::run(config)?;
         }
     }
     Ok(())
